@@ -16,7 +16,23 @@ const router = createRouter({
       },
       component: () => import('@/pages/Components/ComponentView.vue'),
       beforeEnter: () => import.meta.env.DEV
-    }
+    },
+    {
+      path: '/auth/login',
+      name: 'login',
+      meta: {
+        title: 'Вход'
+      },
+      component: () => import('@/pages/Auth/TheLogin.vue')
+    },
+    {
+      path: '/auth/signup',
+      name: 'signup',
+      meta: {
+        title: 'Регистрация'
+      },
+      component: () => import('@/pages/Auth/TheSignup.vue')
+    },
   ]
 })
 

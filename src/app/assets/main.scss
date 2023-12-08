@@ -79,3 +79,9 @@ h5 {
 h6 {
   font-size: 1.45rem;
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}

@@ -2,35 +2,37 @@
 import { computed, onUpdated, ref } from 'vue'
 
 export interface AppInputSlots {
-  label?(): any
+  label?(): any;
 }
 
 export interface AppInputModifiers {
-  upper?: boolean
-  lower?: boolean
-  capitalize?: boolean
-  trim?: boolean
-  uniqueSymbols?: boolean
-  number?: boolean
+  upper?: boolean;
+  lower?: boolean;
+  capitalize?: boolean;
+  trim?: boolean;
+  uniqueSymbols?: boolean;
+  number?: boolean;
 }
 
 export interface AppInputProps {
-  placeholder?: string
-  modelValue?: string
-  modelModifiers?: AppInputModifiers
-  disabled?: boolean
+  placeholder?: string;
+  modelValue?: string;
+  modelModifiers?: AppInputModifiers;
+  disabled?: boolean;
+  type: 'text' | 'password';
 }
 
 export interface AppInputEmits {
   (e: 'update:modelValue', value: string): void
 }
 
-const slots = defineSlots<AppInputSlots>()
-const emit = defineEmits<AppInputEmits>()
+const slots = defineSlots<AppInputSlots>();
+const emit = defineEmits<AppInputEmits>();
 
 const props = withDefaults(defineProps<AppInputProps>(), {
+  type: 'text',
   modelModifiers: () => ({})
-})
+});
 
 const inputText = ref(props.modelValue ?? '')
 const inputElement = ref<HTMLInputElement | null>(null)
@@ -84,7 +86,20 @@ onUpdated(() => {
   }
 })
 
-const conditionalClasses = computed(() => ({ 'app-input-text-field-blocked': props.disabled }))
+const isFocused = ref(false);
+
+const conditionalClasses = computed(() => ({
+  'app-input-text-field-blocked': props.disabled,
+  'app-input-text-field-focused': isFocused.value
+}))
+
+const onFocus = () => {
+  isFocused.value = true;
+}
+
+const onBlur = () => {
+  isFocused.value = false;
+}
 </script>
 
 <template>
@@ -95,15 +110,18 @@ const conditionalClasses = computed(() => ({ 'app-input-text-field-blocked': pro
 
     <div class="app-input-text-field" :class="conditionalClasses" @click="focusOnInput">
       <div class="app-input-text-field__wrapper">
-        <p v-show="showPlaceholder" class="app-input-text-field__placeholder">
+        <p v-show="showPlaceholder" class="app-input-text-field__placeholder truncate">
           {{ props.placeholder }}
         </p>
         <input
           :disabled="props.disabled"
           ref="inputElement"
           class="app-input-text-field__text"
+          :type="type"
           :value="inputText"
           @input="updateModelValue"
+          @focus="onFocus"
+          @blur="onBlur"
         />
       </div>
     </div>
@@ -128,6 +146,10 @@ const conditionalClasses = computed(() => ({ 'app-input-text-field-blocked': pro
       cursor: default;
     }
 
+    &-focused {
+      border-color: #eeec;
+    }
+
     &__wrapper {
       position: relative;
     }
@@ -139,7 +161,7 @@ const conditionalClasses = computed(() => ({ 'app-input-text-field-blocked': pro
       margin: 0;
       padding: 0;
       opacity: 0.25;
-      font-size: 16px;
+      max-width: 100%;
     }
 
     &__text {
@@ -148,7 +170,6 @@ const conditionalClasses = computed(() => ({ 'app-input-text-field-blocked': pro
       border: none;
       outline: none;
       background: transparent;
-      font-size: 16px;
     }
   }
 }

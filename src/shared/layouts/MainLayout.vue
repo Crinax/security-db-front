@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router'
 <template>
   <div id="app-modals"></div>
   <div id="app-view">
-    <RouterView />
+    <router-view />
   </div>
 </template>
 

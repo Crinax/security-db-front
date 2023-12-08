@@ -54,7 +54,6 @@ const click = (e: MouseEvent) => (!props.block ? emit('click', e) : void 0)
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 16px;
   transition: 0.1s;
 
   &-text {

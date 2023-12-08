@@ -7,24 +7,27 @@ export interface AppTextSlots {
 }
 
 export interface AppTextProps {
-  kind?: ColorKinds | string
+  kind?: ColorKinds | string;
+  inline: boolean;
 }
 
 const props = withDefaults(defineProps<AppTextProps>(), {
-  kind: 'primary'
-})
+  kind: 'primary',
+  inline: false,
+});
 
 const textClasses = computed(() => ({
   'app-text': true,
   [`app-text__${props.kind}`]: props.kind !== 'primary',
   'app-text__high-brightness': props.kind !== 'primary'
-}))
+}));
+const textComponent = computed(() => props.inline ? 'span' : 'p');
 </script>
 
 <template>
-  <p :class="textClasses">
+  <component :is="textComponent" :class="textClasses">
     <slot />
-  </p>
+  </component>
 </template>
 
 <style scoped lang="scss">

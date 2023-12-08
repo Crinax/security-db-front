@@ -15,7 +15,8 @@
       "@widgets/*": ["./src/widgets/*"],
       "@app/*": ["./src/app/*"],
       "@features/*": ["./src/features/*"],
-      "@entities/*": ["./src/entities/*"]
+      "@entities/*": ["./src/entities/*"],
+      "@api/*": ["./src/shared/api/*"]
     }
   }
 }
