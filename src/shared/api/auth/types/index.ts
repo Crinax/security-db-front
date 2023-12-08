@@ -17,7 +17,3 @@ export interface AuthResult {
   access_token: string;
   expires: number;
 }
-
-export interface AuthError {
-  message: 'invalid_data' | 'internal_error';
-}

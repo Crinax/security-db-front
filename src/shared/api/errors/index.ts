@@ -1,0 +1,31 @@
+export interface ErrorMessage {
+  message: string;
+}
+
+export class ApiError {
+  constructor(message: string) {
+    this.message = message;
+  }
+
+  message: string;
+
+  static from(err: any): ApiError {
+    if (err.response.data) {
+      switch (err.response.data.message) {
+        case 'internal_error':
+          return new ApiError('Внутренняя ошибка сервера...');
+        case 'invalid_data':
+          return new ApiError('Данные введены некорректно!');
+
+        default:
+          return new ApiError('Произошла непредвиденная ошибка...')
+      }
+    }
+
+    return new ApiError('Произошла непредвиденная ошибка...')
+  }
+
+  toString() {
+    return this.message;
+  }
+}

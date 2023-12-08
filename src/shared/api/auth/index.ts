@@ -1,13 +1,24 @@
 import type { AxiosInstance } from "axios";
-import type { AuthError, AuthResult, AuthorizationProps, RegistrationProps } from "@api/auth/types";
+import type { AuthResult, AuthorizationProps, RegistrationProps } from "@api/auth/types";
+import { ApiError } from "../errors";
+import { transformAndValidate } from "class-transformer-validator";
+import { AuthDtoValidator } from "./validators";
 
 export const auth = async (
   instance: AxiosInstance,
   props: AuthorizationProps
 ) => {
+  const validation = await transformAndValidate(AuthDtoValidator, props)
+    .catch(data => new ApiError('Данные введены некорректно!'));
+
+
+  if (validation instanceof ApiError) {
+    return validation
+  }
+
   const response = await instance.post<AuthResult>('/auth', props)
     .then((resp) => resp.data)
-    .catch<AuthError>((err) => err.response?.data);
+    .catch(ApiError.from);
 
   return response;
 }

@@ -7,6 +7,7 @@ import { useAppSettingsStore } from '@app/stores/app-settings';
 import { ref, computed } from 'vue';
 import { api } from '@api';
 import { auth } from '@api/auth';
+import { ApiError } from '@/shared/api/errors';
 
 const usernameOrEmail = ref('');
 const password = ref('');
@@ -19,16 +20,6 @@ const CLIENT_ERROR_MESSAGE = 'Имя пользователя или парол�
 
 // TODO: use class-validator
 const checkFormAndSend = async () => {
-  if (password.value.length < 8 || password.value.length > 32) {
-    error.value = CLIENT_ERROR_MESSAGE;
-    return;
-  }
-
-  if (usernameOrEmail.value.length < 3 || usernameOrEmail.value.length > 255) {
-    error.value = CLIENT_ERROR_MESSAGE;
-    return;
-  }
-
   error.value = '';
   isLoading.value = true;
   appSettings.showLoader();
@@ -41,8 +32,8 @@ const checkFormAndSend = async () => {
   appSettings.hideLoader();
   isLoading.value = false;
   
-  if (result.message) {
-    error.value = result.message === 'invalid_data' ? CLIENT_ERROR_MESSAGE : 'Ошибка сервера! Повторите попытку позже';
+  if (result instanceof ApiError) {
+    error.value = `${result}`;
     return;
   }
 

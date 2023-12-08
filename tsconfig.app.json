@@ -17,6 +17,8 @@
       "@features/*": ["./src/features/*"],
       "@entities/*": ["./src/entities/*"],
       "@api/*": ["./src/shared/api/*"]
-    }
+    },
+    "experimentalDecorators": true,
+    "target": "ESNext"
   }
 }
