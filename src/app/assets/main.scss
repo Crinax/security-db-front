@@ -1,0 +1,81 @@
+@import 'mixins';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+html {
+  width: 100vw;
+  height: max-content;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+  background: var(--color__background);
+}
+
+body {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  background: transparent;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+button,
+[role='button'] {
+  cursor: pointer;
+}
+
+* {
+  --color__background: #1f2125;
+  --color__primary: #2d2f37;
+  --color__selection: #2d2f37df;
+  --color__input: #18191d;
+  --color__modal-fog: #10121785;
+  --color__success: #006907;
+  --color__error: #891107;
+  --color__info: #226689;
+  --color__accent: #5b38bf;
+  --color__text: #cecece;
+
+  color: var(--color__text);
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.25rem;
+
+  @include user-select(none);
+}
+
+*::selection {
+  background-color: var(--color__selection);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.90rem;
+}
+
+h4 {
+  font-size: 1.75rem;
+}
+
+h5 {
+  font-size: 1.60rem;
+}
+
+h6 {
+  font-size: 1.45rem;
+}
