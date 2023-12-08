@@ -8,7 +8,7 @@ export interface AppTextSlots {
 
 export interface AppTextProps {
   kind?: ColorKinds | string;
-  inline: boolean;
+  inline?: boolean;
 }
 
 const props = withDefaults(defineProps<AppTextProps>(), {

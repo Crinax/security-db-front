@@ -19,7 +19,7 @@ export interface AppInputProps {
   modelValue?: string;
   modelModifiers?: AppInputModifiers;
   disabled?: boolean;
-  type: 'text' | 'password';
+  type?: 'text' | 'password';
 }
 
 export interface AppInputEmits {

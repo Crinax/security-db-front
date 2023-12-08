@@ -20,19 +20,17 @@ const labelText = computed(() => routeToSwitch.value === 'login'
 
 <template>
   <flex-center-layout direction="column" :is-full="true">
-    <div class="auth-container">
-      <app-header level="3" :line="false">
-        {{ titleText }}
-      </app-header>
+    <app-header level="3" :line="false">
+      {{ titleText }}
+    </app-header>
 
-      <slot />
+    <slot />
 
-      <div class="auth-switch">
-        <app-text>
-          {{ labelText }}
-          <router-link :to="routeToSwitch">{{ linkText }}</router-link>
-        </app-text>
-      </div>
+    <div class="auth-switch">
+      <app-text>
+        {{ labelText }}
+        <router-link :to="routeToSwitch">{{ linkText }}</router-link>
+      </app-text>
     </div>
   </flex-center-layout>
 </template>
@@ -40,7 +38,6 @@ const labelText = computed(() => routeToSwitch.value === 'login'
 <style lang="scss" scoped>
 .auth-switch {
   margin-top: 1rem;
-  text-align: right;
 
   * {
     font-size: 1rem;
