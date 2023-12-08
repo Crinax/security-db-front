@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { useAppSettinsStore } from '@app/stores/app-settings'
+import { useAppSettingsStore } from '@app/stores/app-settings'
 
-const appSettings = useAppSettinsStore()
+const appSettings = useAppSettingsStore()
 </script>
 
 <template>
