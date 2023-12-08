@@ -1,14 +1,23 @@
 export interface RegistrationProps {
-  email: string,
-  username: string,
-  password: string,
-  first_name: string,
-  second_name: string,
-  patronymic?: string,
-  birth_date: string,
+  email: string;
+  username: string;
+  password: string;
+  first_name: string;
+  second_name: string;
+  patronymic?: string;
+  birth_date: string;
 }
 
 export interface AuthorizationProps {
-  username_or_email: string,
-  password: string,
+  email_or_username: string;
+  password: string;
+}
+
+export interface AuthResult {
+  access_token: string;
+  expires: number;
+}
+
+export interface AuthError {
+  message: 'invalid_data' | 'internal_error';
 }

@@ -5,6 +5,8 @@ import AppButton from '@uikit/AppButton.vue';
 import AppText from '@uikit/AppText.vue';
 import { useAppSettingsStore } from '@app/stores/app-settings';
 import { ref, computed } from 'vue';
+import { api } from '@api';
+import { auth } from '@api/auth';
 
 const usernameOrEmail = ref('');
 const password = ref('');
@@ -16,11 +18,7 @@ const appSettings = useAppSettingsStore();
 const CLIENT_ERROR_MESSAGE = 'Имя пользователя или пароль введены некорректно!'
 
 // TODO: use class-validator
-const checkFormAndSend = () => {
-  if (hasError.value) {
-    return;
-  }
-
+const checkFormAndSend = async () => {
   if (password.value.length < 8 || password.value.length > 32) {
     error.value = CLIENT_ERROR_MESSAGE;
     return;
@@ -34,6 +32,20 @@ const checkFormAndSend = () => {
   error.value = '';
   isLoading.value = true;
   appSettings.showLoader();
+
+  const result = await auth(api, {
+    email_or_username: usernameOrEmail.value,
+    password: password.value
+  });
+
+  appSettings.hideLoader();
+  isLoading.value = false;
+  
+  if (result.message) {
+    error.value = result.message === 'invalid_data' ? CLIENT_ERROR_MESSAGE : 'Ошибка сервера! Повторите попытку позже';
+    return;
+  }
+
 }
 </script>
 
