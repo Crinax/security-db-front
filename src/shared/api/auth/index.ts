@@ -16,11 +16,31 @@ export class AuthModule {
   private expiration: number;
 
   isExpired() {
-    return this.expiration > Date.now() + 240000;
+    return this.expiration > Date.now() + 280000;
   }
 
   isLogged() {
-    this.access_token.length && !this.isExpired();
+    return !!this.access_token.length && !this.isExpired();
+  }
+
+  private updateTokens(access_token: string, expires: number) {
+    this.access_token = access_token;
+    this.expiration = expires;
+    this.api.defaults.headers.Authorization = `Bearer ${access_token}`;
+  }
+
+  async refresh() {
+    const response = await this.api.post<AuthResult>('/auth/refresh-tokens')
+      .then((resp) => resp.data)
+      .catch(ApiError.from);
+
+
+    if (response instanceof ApiError) {
+      return response;
+    }
+
+    const { access_token, expires } = response;
+    this.updateTokens(access_token, expires);
   }
 
   async auth(props: AuthorizationProps) {
@@ -40,10 +60,7 @@ export class AuthModule {
     }
 
     const { access_token, expires } = response;
-
-    this.access_token = access_token;
-    this.expiration = expires;
-    this.api.defaults.headers.Authorization = `Bearer ${access_token}`;
+    this.updateTokens(access_token, expires);
   }
 
   async registration(props: RegistrationProps) {

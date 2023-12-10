@@ -4,14 +4,17 @@ import { AuthModule } from "@api/auth";
 export class Api {
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.VITE_API_URL
-    })
+      baseURL: import.meta.env.VITE_API_URL,
+      withCredentials: true,
+    });
+    this.auth = new AuthModule(this.api);
   }
 
   private api: AxiosInstance;
+  private auth: AuthModule;
 
   authModule() {
-    return new AuthModule(this.api);
+    return this.auth;
   }
 }
 
