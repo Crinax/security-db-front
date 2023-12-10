@@ -3,36 +3,32 @@ import AuthLayout from '@layouts/AuthLayout.vue';
 import AppInput from '@uikit/AppInput.vue';
 import AppButton from '@uikit/AppButton.vue';
 import AppText from '@uikit/AppText.vue';
-import { useAppSettingsStore } from '@app/stores/app-settings';
 import { ref, computed } from 'vue';
 import { api } from '@shared/api';
-import { ApiError } from '@/shared/api/errors';
+import { useAppStateStore } from '@/app/stores/app-state';
 
 const usernameOrEmail = ref('');
 const password = ref('');
 const error = ref('');
 const isLoading = ref(false);
 const hasError = computed(() => error.value.length !== 0);
-const appSettings = useAppSettingsStore();
+const appStateStore = useAppStateStore();
 
 const checkFormAndSend = async () => {
   error.value = '';
-  isLoading.value = true;
-  appSettings.showLoader();
 
-  const result = await api.authModule().auth({
-    email_or_username: usernameOrEmail.value,
-    password: password.value
-  });
+  const result = await appStateStore.runAsync(() => 
+      api.authModule().auth({
+        email_or_username: usernameOrEmail.value,
+        password: password.value
+      })
+  );
 
-  appSettings.hideLoader();
-  isLoading.value = false;
   
-  if (result instanceof ApiError) {
+  if (result) {
     error.value = `${result}`;
     return;
   }
-
 }
 </script>
 
