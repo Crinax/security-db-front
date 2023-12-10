@@ -5,8 +5,7 @@ import AppButton from '@uikit/AppButton.vue';
 import AppText from '@uikit/AppText.vue';
 import { useAppSettingsStore } from '@app/stores/app-settings';
 import { ref, computed } from 'vue';
-import { api } from '@api';
-import { auth } from '@api/auth';
+import { api } from '@shared/api';
 import { ApiError } from '@/shared/api/errors';
 
 const usernameOrEmail = ref('');
@@ -16,15 +15,12 @@ const isLoading = ref(false);
 const hasError = computed(() => error.value.length !== 0);
 const appSettings = useAppSettingsStore();
 
-const CLIENT_ERROR_MESSAGE = 'Имя пользователя или пароль введены некорректно!'
-
-// TODO: use class-validator
 const checkFormAndSend = async () => {
   error.value = '';
   isLoading.value = true;
   appSettings.showLoader();
 
-  const result = await auth(api, {
+  const result = await api.authModule().auth({
     email_or_username: usernameOrEmail.value,
     password: password.value
   });

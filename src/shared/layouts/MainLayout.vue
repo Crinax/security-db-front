@@ -22,7 +22,6 @@ const appSettings = useAppSettingsStore();
   box-shadow: 0px 0px 12px 0px #0003;
   gap: 12px;
   border-radius: 8px;
-  border: 2px solid #fff3;
   overflow: hidden;
   position: relative;
   background-color: var(--color__background);

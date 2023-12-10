@@ -4,30 +4,31 @@ import { ApiError } from "../errors";
 import { transformAndValidate } from "class-transformer-validator";
 import { AuthDtoValidator } from "./validators";
 
-export const auth = async (
-  instance: AxiosInstance,
-  props: AuthorizationProps
-) => {
-  const validation = await transformAndValidate(AuthDtoValidator, props)
-    .catch(data => new ApiError('Данные введены некорректно!'));
-
-
-  if (validation instanceof ApiError) {
-    return validation
+export class AuthModule {
+  constructor(axios: AxiosInstance) {
+    this.api = axios;
   }
 
-  const response = await instance.post<AuthResult>('/auth', props)
-    .then((resp) => resp.data)
-    .catch(ApiError.from);
+  api: AxiosInstance;
 
-  return response;
-}
+  async auth(props: AuthorizationProps) {
+    const validation = await transformAndValidate(AuthDtoValidator, props)
+      .catch(() => new ApiError('Данные введены некорректно!'));
 
-export const registration = async (
-  instance: AxiosInstance,
-  props: RegistrationProps
-) => {
-  const response = await instance.post('/auth/register', props)
+    if (validation instanceof ApiError) {
+      return validation;
+    }
 
-  return response.data;
+    const response = await this.api.post<AuthResult>('/auth', props)
+      .then((resp) => resp.data)
+      .catch(ApiError.from);
+
+    return response;
+  }
+
+  async registration(props: RegistrationProps) {
+    const response = await this.api.post('/auth/register', props);
+
+    return response.data;
+  }
 }
