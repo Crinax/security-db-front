@@ -1,8 +1,8 @@
 import type { AxiosInstance } from "axios";
 import type { AuthResult, AuthorizationProps, RegistrationProps } from "@api/auth/types";
-import { ApiError } from "../errors";
+import { ApiError } from "@api/errors";
 import { transformAndValidate } from "class-transformer-validator";
-import { AuthDtoValidator } from "./validators";
+import { AuthDtoValidator, RegDtoValidator } from "@api/auth/validators";
 
 export class AuthModule {
   constructor(axios: AxiosInstance) {
@@ -64,8 +64,22 @@ export class AuthModule {
   }
 
   async registration(props: RegistrationProps) {
-    const response = await this.api.post('/auth/register', props);
+    const validation = await transformAndValidate(RegDtoValidator, props)
+      .catch((err) => new ApiError('Данные введены некорректно'));
 
-    return response.data;
+    if (validation instanceof ApiError) {
+      return validation;
+    }
+
+    const response = await this.api.post<AuthResult>('/auth/register', validation)
+      .then((resp) => resp.data)
+      .catch(ApiError.from);
+
+    if (response instanceof ApiError) {
+      return response;
+    }
+
+    const { access_token, expires } = response;
+    this.updateTokens(access_token, expires);
   }
 }

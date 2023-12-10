@@ -3,7 +3,19 @@ import AuthLayout from '@layouts/AuthLayout.vue';
 import AppInput from '@uikit/AppInput.vue';
 import AppText from '@uikit/AppText.vue';
 import AppButton from '@uikit/AppButton.vue';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { api } from '@/shared/api';
+import { useAppStateStore } from '@/app/stores/app-state';
+import moment from 'moment';
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+const INVALID_DATE = 'Введена некорректная дата рождения!';
+const PASSWORDS_NOT_EQUALS = 'Пароли не совпдают!';
+
+const appStateStore = useAppStateStore();
+const route = useRoute();
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
@@ -13,11 +25,58 @@ const firstName = ref('');
 const secondName = ref('');
 const patronymic = ref('');
 const birthDate = ref('');
+const error = ref('');
+
+const isPasswordsEquals = computed(() => password.value === passwordDublicate.value);
+const isDateValid = computed(() => moment(birthDate.value, 'YYYY-MM-DD').isValid());
+const hasError = computed(() => error.value.length !== 0);
+
+const checkFormAndSend = async () => {
+  error.value = '';
+  if (!isDateValid.value) {
+    error.value = INVALID_DATE;
+    return;
+  }
+
+  if (!isPasswordsEquals.value) {
+    error.value = PASSWORDS_NOT_EQUALS;
+    return;
+  }
+
+  const result = await appStateStore.runAsync(() => 
+      api.authModule().registration({
+        email: email.value,
+        password: password.value,
+        username: username.value,
+        first_name: firstName.value,
+        second_name: secondName.value,
+        patronymic: patronymic.value.length === 0 ? undefined : patronymic.value,
+        birth_date: birthDate.value,
+      })
+  );
+
+  
+  if (result) {
+    error.value = `${result}`;
+    return;
+  }
+
+  if (route.query.next) {
+    router.replace({ path: route.query.next.toString() });
+    return;
+  }
+
+  router.replace({ name: 'home' });
+}
 </script>
 
 <template>
   <auth-layout>
     <div class="auth-signup">
+      <app-text v-if="hasError" kind="error" class="text-error">
+        {{ error }}
+      </app-text>
+
       <div class="auth-signup__group-inline">
         <app-input v-model="username" class="auth-signup__input" placeholder="Имя пользователя">
           <template #label>
@@ -57,14 +116,13 @@ const birthDate = ref('');
           Фамилия <app-text kind="error" inline>*</app-text>:
         </template>
       </app-input>
-      
       <app-input v-model="patronymic" class="auth-signup__input" placeholder="Отчество">
         <template #label>
           Отчество:
         </template>
       </app-input>
-      
-      <app-input v-model="birthDate" class="auth-signup__input" placeholder="Дата рождения">
+
+      <app-input v-model.date="birthDate" class="auth-signup__input" placeholder="Дата рождения в формате YYYY-MM-DD">
         <template #label>
           Дата рождения <app-text kind="error" inline>*</app-text>:
         </template>
@@ -74,7 +132,7 @@ const birthDate = ref('');
         <app-text kind="error" class="auth-signup__tooltip" inline>*</app-text> - поля обязательные для заполнения
       </app-text>
 
-      <app-button>
+      <app-button @click="checkFormAndSend">
         Зарегистрироваться
       </app-button>
     </div>
@@ -99,5 +157,9 @@ const birthDate = ref('');
   &__tooltip {
     font-size: 1rem;
   }
+}
+
+.text-error {
+  font-size: 1rem;
 }
 </style>

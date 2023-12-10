@@ -16,6 +16,7 @@
     "axios": "^1.6.2",
     "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.0",
+    "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",
     "v3-click-outside": "^1.1.0",

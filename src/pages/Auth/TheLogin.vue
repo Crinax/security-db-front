@@ -6,7 +6,10 @@ import AppText from '@uikit/AppText.vue';
 import { ref, computed } from 'vue';
 import { api } from '@shared/api';
 import { useAppStateStore } from '@/app/stores/app-state';
+import { useRouter, useRoute } from 'vue-router';
 
+const router = useRouter();
+const route = useRoute();
 const usernameOrEmail = ref('');
 const password = ref('');
 const error = ref('');
@@ -29,13 +32,20 @@ const checkFormAndSend = async () => {
     error.value = `${result}`;
     return;
   }
+
+  if (route.query.next) {
+    router.replace({ path: route.query.next.toString() });
+    return;
+  }
+
+  router.replace({ name: 'home' });
 }
 </script>
 
 <template>
   <auth-layout>
     <div class="auth-login">
-      <app-text v-if="hasError" kind="error">{{ error }}</app-text>
+      <app-text v-if="hasError" kind="error" class="text-error">{{ error }}</app-text>
 
       <app-input v-model="usernameOrEmail" class="auth-login__input" placeholder="Имя пользователя или эл. почта">
         <template #label>
@@ -66,5 +76,9 @@ const checkFormAndSend = async () => {
 
 .auth-login__input {
   width: 100%;
+}
+
+.text-error {
+  font-size: 1rem;
 }
 </style>
