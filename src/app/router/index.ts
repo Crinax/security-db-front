@@ -38,6 +38,15 @@ const router = createRouter({
       },
       component: () => import('@/pages/Auth/TheSignup.vue')
     },
+    {
+      path: '/laws',
+      name: 'laws',
+      meta: {
+        title: 'Адвокаты',
+        needAuth: true,
+      },
+      component: () => import('@/pages/Laws/LawsView.vue')
+    }
   ]
 })
 
