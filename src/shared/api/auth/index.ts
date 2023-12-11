@@ -29,6 +29,11 @@ export class AuthModule {
     this.api.defaults.headers.Authorization = `Bearer ${access_token}`;
   }
 
+  private removeTokens() {
+    this.access_token = '';
+    this.expiration = 0;
+  }
+
   async refresh() {
     const response = await this.api.post<AuthResult>('/auth/refresh-tokens')
       .then((resp) => resp.data)
@@ -41,6 +46,11 @@ export class AuthModule {
 
     const { access_token, expires } = response;
     this.updateTokens(access_token, expires);
+  }
+
+  async logout() {
+    await this.api.post('/auth/logout');
+    this.removeTokens();
   }
 
   async auth(props: AuthorizationProps) {
