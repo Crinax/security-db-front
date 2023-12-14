@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { ColorKinds } from '@uikit/basic-types'
 
 export interface AppTextSlots {
-  default?(): string
+  default?: string
 }
 
 export interface AppTextProps {

@@ -2,7 +2,7 @@
 import { computed, onUpdated, ref } from 'vue'
 
 export interface AppInputSlots {
-  label?(): any;
+  label?: any;
 }
 
 export interface AppInputModifiers {

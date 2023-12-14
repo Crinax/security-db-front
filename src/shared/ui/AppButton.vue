@@ -12,8 +12,8 @@ export interface AppButtonEmits {
 }
 
 export interface AppButtonSlots {
-  icon?(): any
-  default?(): any
+  default?: any,
+  icon?: any
 }
 
 const props = withDefaults(defineProps<AppButtonProps>(), {

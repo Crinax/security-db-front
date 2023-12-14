@@ -72,10 +72,10 @@ const checkFormAndSend = async () => {
   flex-direction: column;
   gap: 1rem;
   width: 40%;
-}
 
-.auth-login__input {
-  width: 100%;
+  &__input {
+    width: 100%;
+  }
 }
 
 .text-error {

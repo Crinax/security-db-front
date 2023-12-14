@@ -48,7 +48,7 @@ const expirienceStatus = computed(() =>
   display: flex;
   gap: 1rem;
   width: 100%;
-  hieght: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
