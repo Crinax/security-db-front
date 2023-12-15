@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 export interface FlexCenterLayoutProps {
   direction?: 'row' | 'column';
-  isFull: boolean;
+  isFull?: boolean;
 }
 
 withDefaults(defineProps<FlexCenterLayoutProps>(), {
@@ -25,7 +25,7 @@ withDefaults(defineProps<FlexCenterLayoutProps>(), {
 }
 
 .full-layout {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 </style>

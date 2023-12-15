@@ -46,15 +46,14 @@ const expirienceStatus = computed(() =>
 <style scoped lang="scss">
 .app-law {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
   align-items: center;
   border-radius: 6px;
   border: 1px solid #51525355;
-  padding: 5px 10px;
-  background-color: #3f424550;
+  padding: 1rem 0 2rem 0;
+  background-color: var(--color__primary);
   box-shadow: 0 0 5px 0 #111213f0;
   filter: brightness(100%);
   cursor: pointer;
@@ -65,12 +64,12 @@ const expirienceStatus = computed(() =>
   }
 
   &__avatar {
-    width: 50px;
+    width: 120px;
+    height: 120px;
     flex-shrink: 0;
   }
 
   &__info {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;

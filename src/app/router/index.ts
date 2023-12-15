@@ -18,6 +18,10 @@ const router = createRouter({
       meta: {
         title: 'Компоненты',
         needAuth: true,
+        showInNavigation: import.meta.env.DEV,
+        routeTitle: 'Компоненты',
+        routeIcon: 'oi-beaker',
+        order: 1,
       },
       component: () => import('@/pages/Components/ComponentView.vue'),
       beforeEnter: () => import.meta.env.DEV
@@ -44,6 +48,10 @@ const router = createRouter({
       meta: {
         title: 'Адвокаты',
         needAuth: true,
+        showInNavigation: true,
+        routeTitle: 'Адвокаты',
+        routeIcon: 'oi-person-fill',
+        order: 2,
       },
       component: () => import('@/pages/Laws/LawsView.vue')
     }

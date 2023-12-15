@@ -5,6 +5,7 @@ import AppButton from '@/shared/ui/AppButton.vue';
 import { useAppStateStore } from '@/app/stores/app-state';
 import { api } from '@/shared/api';
 import { useRouter } from 'vue-router';
+import BaseLayout from '@layouts/BaseLayout.vue';
 
 const appSettings = useAppSettingsStore();
 const appState = useAppStateStore();
@@ -17,11 +18,8 @@ const logout = async () => {
 </script>
 
 <template>
-  <main class="app-main">
-    <router-link v-if="appSettings.isDevMode" :to="{ name: 'components' }">Components</router-link>
-    <router-link :to="{ name: 'laws' }">Laws</router-link>
-    <app-button @click="logout">Logout</app-button>
-  </main>
+  <base-layout>
+  </base-layout>
 </template>
 
 <style scoped lang="scss">

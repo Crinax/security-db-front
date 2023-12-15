@@ -136,6 +136,7 @@ const onBlur = () => {
   width: max-content;
 
   &-text-field {
+    width: 100%;
     padding: 8px 12px;
     background: var(--color__input);
     border-radius: 8px;

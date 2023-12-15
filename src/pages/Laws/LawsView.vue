@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import AppLawsList from '@widgets/laws/AppLawsList.vue';
+import BaseLayout from '@layouts/BaseLayout.vue';
 </script>
 
 <template>
-  <div class="laws-view">
-    <app-laws-list class="laws-view__list" />
-  </div>
+  <base-layout>
+    <div class="laws-view">
+      <app-laws-list class="laws-view__list" />
+    </div>
+  </base-layout>
 </template>
 
 <style scoped lang="scss">
@@ -18,7 +21,6 @@ import AppLawsList from '@widgets/laws/AppLawsList.vue';
   flex-direction: column;
 
   &__list {
-    padding: 0 25%;
     max-height: 100%;
   }
 }

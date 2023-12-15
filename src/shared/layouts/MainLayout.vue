@@ -10,6 +10,7 @@ const appSettings = useAppStateStore();
   <div id="app-modals">
     <app-loader v-if="appSettings.isLoading" />
   </div>
+
   <div id="app-view">
     <router-view />
   </div>
@@ -21,7 +22,6 @@ const appSettings = useAppStateStore();
   height: 100vh;
   box-shadow: 0px 0px 12px 0px #0003;
   gap: 12px;
-  border-radius: 8px;
   overflow: hidden;
   position: relative;
   background-color: var(--color__background);
