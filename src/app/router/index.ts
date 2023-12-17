@@ -54,6 +54,14 @@ const router = createRouter({
         order: 2,
       },
       component: () => import('@/pages/Laws/LawsView.vue')
+    },
+    {
+      path: '/404',
+      name: '404',
+      meta: {
+        title: 'Страница не найдена!',
+      },
+      component: () => import('@/pages/Error/AppNotFound.vue')
     }
   ]
 })
