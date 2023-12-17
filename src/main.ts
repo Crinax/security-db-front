@@ -7,14 +7,24 @@ import MainLayout from './shared/layouts/MainLayout.vue';
 import router from './app/router';
 
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
-import { OiArrowRight, OiPersonFill, OiPerson, OiBeaker, OiSignOut } from 'oh-vue-icons/icons';
+import {
+  OiArrowRight,
+  OiPersonFill,
+  OiPerson,
+  OiBeaker,
+  OiSignOut,
+  OiTrash,
+  OiPencil,
+} from 'oh-vue-icons/icons';
 
 addIcons(
   OiArrowRight,
   OiBeaker,
   OiPersonFill,
   OiPerson,
-  OiSignOut
+  OiSignOut,
+  OiTrash,
+  OiPencil,
 );
 
 const app = createApp(MainLayout);

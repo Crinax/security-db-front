@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLaw from '@entities/laws/AppLaw.vue';
 import AppInput from '@uikit/AppInput.vue';
+import AppButton from '@uikit/AppButton.vue';
 import { ref } from 'vue';
 
 const searchInput = ref('');
@@ -19,6 +20,7 @@ const searchInput = ref('');
         second-name="Simpson"
       />
     </div>
+    <app-button>Добавить</app-button>
   </div>
 </template>
 
@@ -31,13 +33,13 @@ const searchInput = ref('');
   height: 100%;
   overflow-y: hidden;
   max-height: 100%;
+  padding-bottom: 1rem;
 
   &__list {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
-    gap: 2rem;
-    row-gap: 1rem;
+    gap: 1rem;
   }
 
   &__search-input {

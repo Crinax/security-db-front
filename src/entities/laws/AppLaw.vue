@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import moment from 'moment';
 import AppAvatar from '@uikit/AppAvatar.vue';
 import AppText from '@uikit/AppText.vue';
+import AppIconButton from '@uikit/AppIconButton.vue';
 import { getYearSuffix } from '@shared/helpers/date';
  
 export interface AppLawProps {
@@ -40,19 +41,30 @@ const expirienceStatus = computed(() =>
         Cтаж менее года
       </app-text>
     </div>
+
+    <div class="app-law__action-panel">
+      <app-icon-button
+        name="oi-pencil"
+        scale="1.4"
+      />
+      <app-icon-button
+        name="oi-trash"
+        scale="1.4"
+        fill="#fa4444"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .app-law {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 1rem;
   align-items: center;
   border-radius: 6px;
   border: 1px solid #51525355;
-  padding: 1rem 0 2rem 0;
+  padding: 0.5rem;
   background-color: var(--color__primary);
   box-shadow: 0 0 5px 0 #111213f0;
   filter: brightness(100%);
@@ -63,9 +75,15 @@ const expirienceStatus = computed(() =>
     filter: brightness(110%);
   }
 
+  &__action-panel {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+  }
+
   &__avatar {
-    width: 120px;
-    height: 120px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
   }
 
