@@ -21,10 +21,10 @@ export const useLawsStore = defineStore('laws', () => {
   const laws = ref<LawsState[]>([]);
   const appState = useAppStateStore();
 
-  const mappedLaws = computed(() => laws.value.map((law) => ({ [law.uid]: law })));
+  const mappedLaws = computed(() => laws.value.map((law) => ({ [law.law_uid]: law })));
   const mappedLawsIndex = computed(
     () => laws.value
-      .map((law, index) => ({ [law.uid]: index }))
+      .map((law, index) => ({ [law.law_uid]: index }))
       .reduce((a, b) => ({ ...a, ...b }))
   );
 
@@ -40,8 +40,8 @@ export const useLawsStore = defineStore('laws', () => {
     laws.value.splice(0, laws.value.length, ..._laws);
   }
 
-  const removeLawsLocal = (uid: string) => {
-    const index = mappedLawsIndex.value[uid];
+  const removeLawsLocal = (law_uid: string) => {
+    const index = mappedLawsIndex.value[law_uid];
 
     if (index !== undefined) {
       laws.value.splice(index, 1);

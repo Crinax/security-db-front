@@ -5,6 +5,7 @@ import AppAvatar from '@uikit/AppAvatar.vue';
 import AppText from '@uikit/AppText.vue';
 import AppIconButton from '@uikit/AppIconButton.vue';
 import { getYearSuffix } from '@shared/helpers/date';
+import { useLawsStore } from '@entities/laws/store';
  
 export interface AppLawProps {
   avatarUid?: string;
@@ -15,6 +16,7 @@ export interface AppLawProps {
 }
 
 const props = defineProps<AppLawProps>();
+const lawsStore = useLawsStore();
 const elapsedYears = computed(() => moment().diff(props.startActivityDate, 'years'));
 const fullname = computed(() => `${props.firstName} ${props.secondName}`);
 const yearsSuffix = computed(() => getYearSuffix(elapsedYears.value));
@@ -25,6 +27,8 @@ const expirienceStatus = computed(() =>
       ? 'app-law__silver-status'
       : 'app-law__default'
 );
+
+const remove = () => lawsStore.removeLawsLocal(props.lawUid);
 </script>
 
 <template>
@@ -51,6 +55,7 @@ const expirienceStatus = computed(() =>
         name="oi-trash"
         scale="1.4"
         fill="#fa4444"
+        @click="remove"
       />
     </div>
   </div>
