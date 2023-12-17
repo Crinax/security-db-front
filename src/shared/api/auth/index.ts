@@ -1,22 +1,26 @@
-import type { AxiosInstance } from "axios";
+import { type AxiosInstance } from "axios";
 import type { AuthResult, AuthorizationProps, RegistrationProps } from "@api/auth/types";
 import { ApiError } from "@api/errors";
 import { transformAndValidate } from "class-transformer-validator";
 import { AuthDtoValidator, RegDtoValidator } from "@api/auth/validators";
 
 export class AuthModule {
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, withoutAuthUrls: string[]) {
     this.api = axios;
     this.access_token = '';
     this.expiration = 0;
+    this.isMiddlewareSetted = false;
+    this.withoutAuthUrls = withoutAuthUrls;
   }
 
   private api: AxiosInstance;
   private access_token: string;
   private expiration: number;
+  private isMiddlewareSetted: boolean;
+  private withoutAuthUrls: string[];
 
   isExpired() {
-    return this.expiration > Date.now() + 280000;
+    return Date.now() + 60000 > this.expiration;
   }
 
   isLogged() {
@@ -46,11 +50,39 @@ export class AuthModule {
 
     const { access_token, expires } = response;
     this.updateTokens(access_token, expires);
+    this.setupMiddleware();
   }
 
   async logout() {
     await this.api.post('/auth/logout');
     this.removeTokens();
+  }
+
+  setupMiddleware() {
+    if (!this.isMiddlewareSetted) {
+      this.api.interceptors.request.use(async (config) => {
+        if (!config.url) {
+          return config;
+        }
+
+        if (this.withoutAuthUrls.includes(config.url)) {
+          return config;
+        }
+
+        if (!this.isExpired()) {
+          return config;
+        }
+
+        const result = await this.refresh();
+        console.log(result);
+
+        if (result instanceof ApiError) {
+          throw new ApiError('Не авторизован');
+        }
+
+        return config;
+      });
+    }
   }
 
   async auth(props: AuthorizationProps) {
@@ -71,11 +103,12 @@ export class AuthModule {
 
     const { access_token, expires } = response;
     this.updateTokens(access_token, expires);
+    this.setupMiddleware();
   }
 
   async registration(props: RegistrationProps) {
     const validation = await transformAndValidate(RegDtoValidator, props)
-      .catch((err) => new ApiError('Данные введены некорректно'));
+      .catch(() => new ApiError('Данные введены некорректно'));
 
     if (validation instanceof ApiError) {
       return validation;
@@ -91,5 +124,6 @@ export class AuthModule {
 
     const { access_token, expires } = response;
     this.updateTokens(access_token, expires);
+    this.setupMiddleware();
   }
 }
