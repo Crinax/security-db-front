@@ -3,8 +3,11 @@ import AppLaw from '@entities/laws/AppLaw.vue';
 import AppInput from '@uikit/AppInput.vue';
 import AppButton from '@uikit/AppButton.vue';
 import { ref } from 'vue';
+import { api } from '@/shared/api';
 
 const searchInput = ref('');
+
+api.lawsModule().getLaws().then(console.log);
 </script>
 
 <template>

@@ -10,7 +10,7 @@ export class ApiError {
   message: string;
 
   static from(err: any): ApiError {
-    if (err.response.data) {
+    if (err?.response?.data) {
       switch (err.response.data.message) {
         case 'internal_error':
           return new ApiError('Внутренняя ошибка сервера...');
@@ -18,11 +18,12 @@ export class ApiError {
           return new ApiError('Данные введены некорректно!');
 
         default:
-          return new ApiError('Произошла непредвиденная ошибка...')
+          return new ApiError('Произошла непредвиденная ошибка...');
       }
     }
 
-    return new ApiError('Произошла непредвиденная ошибка...')
+    console.log(err);
+    return new ApiError('Произошла непредвиденная ошибка...');
   }
 
   toString() {
