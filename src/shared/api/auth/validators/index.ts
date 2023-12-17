@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, Length } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString, Length } from "class-validator";
 
 export class AuthDtoValidator {
   @IsString()
@@ -35,4 +35,12 @@ export class RegDtoValidator {
 
   @IsString()
   public birth_date!: Date;
+}
+
+export class AuthResponseValidator {
+  @IsString()
+  public access_token!: string;
+
+  @IsNumber()
+  public expires!: number;
 }

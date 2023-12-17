@@ -2,7 +2,7 @@ import { type AxiosInstance } from "axios";
 import type { AuthResult, AuthorizationProps, RegistrationProps } from "@api/auth/types";
 import { ApiError } from "@api/errors";
 import { transformAndValidate } from "class-transformer-validator";
-import { AuthDtoValidator, RegDtoValidator } from "@api/auth/validators";
+import { AuthDtoValidator, AuthResponseValidator, RegDtoValidator } from "@api/auth/validators";
 
 export class AuthModule {
   constructor(axios: AxiosInstance, withoutAuthUrls: string[]) {
@@ -27,6 +27,11 @@ export class AuthModule {
     return !!this.access_token.length && !this.isExpired();
   }
 
+  async validate(response: AuthResult) {
+    const result = await transformAndValidate(AuthResponseValidator, response);
+    return result
+  }
+
   private updateTokens(access_token: string, expires: number) {
     this.access_token = access_token;
     this.expiration = expires;
@@ -40,7 +45,7 @@ export class AuthModule {
 
   async refresh() {
     const response = await this.api.post<AuthResult>('/auth/refresh-tokens')
-      .then((resp) => resp.data)
+      .then((resp) => this.validate(resp.data))
       .catch(ApiError.from);
 
 
@@ -74,7 +79,6 @@ export class AuthModule {
         }
 
         const result = await this.refresh();
-        console.log(result);
 
         if (result instanceof ApiError) {
           throw new ApiError('Не авторизован');
@@ -94,7 +98,7 @@ export class AuthModule {
     }
 
     const response = await this.api.post<AuthResult>('/auth', props)
-      .then((resp) => resp.data)
+      .then((resp) => this.validate(resp.data))
       .catch(ApiError.from);
 
     if (response instanceof ApiError) {
@@ -115,7 +119,7 @@ export class AuthModule {
     }
 
     const response = await this.api.post<AuthResult>('/auth/register', validation)
-      .then((resp) => resp.data)
+      .then((resp) => this.validate(resp.data))
       .catch(ApiError.from);
 
     if (response instanceof ApiError) {
