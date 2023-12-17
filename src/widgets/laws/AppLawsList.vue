@@ -2,12 +2,20 @@
 import AppLaw from '@entities/laws/AppLaw.vue';
 import AppInput from '@uikit/AppInput.vue';
 import AppButton from '@uikit/AppButton.vue';
-import { ref } from 'vue';
-import { api } from '@/shared/api';
+import { computed, ref } from 'vue';
+import { useLawsStore } from '@entities/laws/store';
 
 const searchInput = ref('');
+const lawsStore = useLawsStore();
 
-api.lawsModule().getLaws().then(console.log);
+lawsStore.requestLaws();
+
+const searchedLaws = computed(
+  () => lawsStore.laws.filter((law) =>
+    law.first_name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+      law.second_name.toLowerCase().includes(searchInput.value.toLowerCase())
+  )
+)
 </script>
 
 <template>
@@ -15,12 +23,12 @@ api.lawsModule().getLaws().then(console.log);
     <app-input v-model="searchInput" placeholder="Поиск" class="laws-list__search-input" />
     <div class="laws-list__list scroll-style">
       <app-law
-        v-for="i in 20"
-        :key="i"
-        law-uid="a"
-        :start-activity-date="new Date('2023-10-10')"
-        first-name="Gomer"
-        second-name="Simpson"
+        v-for="law in searchedLaws"
+        :key="law.uid"
+        :law-uid="law.law_uid"
+        :start-activity-date="law.start_activity_date"
+        :first-name="law.first_name"
+        :second-name="law.second_name"
       />
     </div>
     <app-button>Добавить</app-button>

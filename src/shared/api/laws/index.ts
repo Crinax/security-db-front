@@ -11,12 +11,12 @@ export class LawsModule {
 
   private api: AxiosInstance;
 
-  validateLaws(response: LawsResponse) {
+  validateLaws(response: LawsResponse | LawsResponse[]) {
     return transformAndValidate(LawsResponseValidator, response);
   }
 
   async getLaws() {
-    return await this.api.get<LawsResponse>('/laws')
+    return await this.api.get<LawsResponse[]>('/laws')
       .then((resp) => this.validateLaws(resp.data))
       .catch(ApiError.from);
   }
