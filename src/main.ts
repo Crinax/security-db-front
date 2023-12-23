@@ -5,6 +5,8 @@ import { createPinia } from 'pinia';
 
 import MainLayout from './shared/layouts/MainLayout.vue';
 import router from './app/router';
+import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
 import {

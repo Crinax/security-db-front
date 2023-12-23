@@ -5,6 +5,7 @@ import type { LawsResponseValidator } from '@/shared/api/laws/validators';
 import { wrapArray } from '@/shared/helpers/arrays';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { showError } from '@/shared/helpers/notify';
 
 export interface LawsState {
   avatar_uid: string | null;
@@ -22,11 +23,6 @@ export const useLawsStore = defineStore('laws', () => {
   const appState = useAppStateStore();
 
   const mappedLaws = computed(() => laws.value.map((law) => ({ [law.law_uid]: law })));
-  const mappedLawsIndex = computed(
-    () => laws.value
-      .map((law, index) => ({ [law.law_uid]: index }))
-      .reduce((a, b) => ({ ...a, ...b }))
-  );
 
   const requestLaws = async () => {
     const lawsResponse = await appState.runAsync(() => api.lawsModule().getLaws());
@@ -36,20 +32,22 @@ export const useLawsStore = defineStore('laws', () => {
     }
   }
 
+  const removeLaws = async (uids: string[]) => {
+    removeLawsLocal(uids);
+    const response = await appState.runAsync(() => api.lawsModule().deleteMany(uids));
+
+    if (response instanceof ApiError) {
+      showError(`${response}`);
+    }
+  }
+
   const requestLawsLocal = (_laws: LawsResponseValidator[]) => {
     laws.value.splice(0, laws.value.length, ..._laws);
   }
 
-  const removeLawsLocal = (law_uid: string) => {
-    const index = mappedLawsIndex.value[law_uid];
-
-    if (index !== undefined) {
-      laws.value.splice(index, 1);
-
-      return true;
-    }
-
-    return false;
+  const removeLawsLocal = (uids: string[]) => {
+    const filtered = laws.value.filter((law) => !uids.includes(law.law_uid));
+    laws.value.splice(0, laws.value.length, ...filtered);
   }
 
   const addLawsLocal = (law: LawsResponseValidator) => {
@@ -63,5 +61,6 @@ export const useLawsStore = defineStore('laws', () => {
     requestLawsLocal,
     removeLawsLocal,
     addLawsLocal,
+    removeLaws,
   }
 });

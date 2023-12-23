@@ -16,6 +16,8 @@ export class ApiError {
           return new ApiError('Внутренняя ошибка сервера...');
         case 'invalid_data':
           return new ApiError('Данные введены некорректно!');
+        case 'no_rights':
+          return new ApiError('Ошибка! У вас недостаточно прав');
 
         default:
           return new ApiError('Произошла непредвиденная ошибка...');

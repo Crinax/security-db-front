@@ -28,7 +28,7 @@ const expirienceStatus = computed(() =>
       : 'app-law__default'
 );
 
-const remove = () => lawsStore.removeLawsLocal(props.lawUid);
+const remove = () => lawsStore.removeLaws([props.lawUid]);
 </script>
 
 <template>

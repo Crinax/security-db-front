@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
-import type { LawsResponse } from "./types";
+import type { DeleteLawsResponse, LawsResponse } from "./types";
 import { transformAndValidate } from "class-transformer-validator";
-import { LawsResponseValidator } from "./validators";
+import { DeleteManyLawsResponseValidator, LawsResponseValidator } from "./validators";
 import { ApiError } from "../errors";
 
 export class LawsModule {
@@ -15,9 +15,21 @@ export class LawsModule {
     return transformAndValidate(LawsResponseValidator, response);
   }
 
+  validateLawsDeletion(response: DeleteLawsResponse[]) {
+    return transformAndValidate(DeleteManyLawsResponseValidator, response);
+  }
+
   async getLaws() {
     return await this.api.get<LawsResponse[]>('/laws')
       .then((resp) => this.validateLaws(resp.data))
       .catch(ApiError.from);
+  }
+
+  async deleteMany(uids: string[]) {
+    return await this.api.delete<DeleteLawsResponse[]>('/laws', {
+      data: { uids }
+    })
+      .then((resp) => this.validateLawsDeletion(resp.data))
+      .catch(ApiError.from)
   }
 }

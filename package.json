@@ -17,6 +17,7 @@
     "class-transformer": "^0.5.1",
     "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.0",
+    "element-plus": "^2.4.4",
     "moment": "^2.29.4",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.1.7",

@@ -8,3 +8,7 @@ export interface LawsResponse {
   start_activity_date: string;
   uid: string;
 }
+
+export interface DeleteLawsResponse {
+  uids: string[];
+}

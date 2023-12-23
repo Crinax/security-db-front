@@ -30,3 +30,8 @@ export class LawsResponseValidator {
   @IsUUID()
   public uid!: string;
 }
+
+export class DeleteManyLawsResponseValidator {
+  @IsUUID('4', { each: true })
+  public uids!: string[];
+}
