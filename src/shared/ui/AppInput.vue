@@ -135,6 +135,10 @@ const onBlur = () => {
   gap: 4px;
   width: max-content;
 
+  &__label {
+    white-space: nowrap;
+  }
+
   &-text-field {
     width: 100%;
     padding: 8px 12px;
